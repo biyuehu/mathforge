@@ -23,6 +23,20 @@ public partial class FilterWindow : Window
     TypeCheckList.ItemsSource = _bank.Questions.Select(q => q.Type).Distinct().OrderBy(t => t).ToList();
     DifficultyCheckList.ItemsSource = _bank.Questions.Select(q => q.Difficulty).Distinct().OrderBy(d => d).ToList();
 
+    YearCheckList.ItemsSource = _bank.Questions
+        .Where(q => q.Source.Year.HasValue)
+        .Select(q => q.Source.Year!.Value.ToString())
+        .Distinct()
+        .OrderByDescending(y => y)
+        .ToList();
+
+    ExamNameCheckList.ItemsSource = _bank.Questions
+        .Where(q => !string.IsNullOrEmpty(q.Source.ExamName))
+        .Select(q => q.Source.ExamName)
+        .Distinct()
+        .OrderBy(e => e)
+        .ToList();
+
     RecomputeMatches();
   }
 
@@ -63,11 +77,13 @@ public partial class FilterWindow : Window
     var selectedTopics = GetCheckedTags(TopicCheckList);
     var selectedTypes = GetCheckedTags(TypeCheckList);
     var selectedDifficulties = GetCheckedTags(DifficultyCheckList);
+    var selectedYears = GetCheckedTags(YearCheckList);
+    var selectedExamNames = GetCheckedTags(ExamNameCheckList);
     bool onlyUnattempted = OnlyUnattemptedCheck.IsChecked == true;
 
     var attemptedIds = onlyUnattempted
-      ? _dataStore.Attempts.Select(a => a.QuestionId).ToHashSet()
-      : null;
+        ? _dataStore.Attempts.Select(a => a.QuestionId).ToHashSet()
+        : null;
 
     _matched = _bank.Questions.Where(q =>
     {
@@ -76,6 +92,10 @@ public partial class FilterWindow : Window
       if (selectedTypes.Count > 0 && !selectedTypes.Contains(q.Type))
         return false;
       if (selectedDifficulties.Count > 0 && !selectedDifficulties.Contains(q.Difficulty))
+        return false;
+      if (selectedYears.Count > 0 && (!q.Source.Year.HasValue || !selectedYears.Contains(q.Source.Year.Value.ToString())))
+        return false;
+      if (selectedExamNames.Count > 0 && !selectedExamNames.Contains(q.Source.ExamName))
         return false;
       if (attemptedIds != null && attemptedIds.Contains(q.QuestionId))
         return false;

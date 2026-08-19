@@ -60,6 +60,38 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
+                <TextBlock Text="年份（不勾选则不限）" FontWeight="Bold" Margin="0,0,0,8"/>
+                <ItemsControl x:Name="YearCheckList" Margin="0,0,0,16">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding}" Tag="{Binding}"
+                                      Checked="OnFilterChanged" Unchecked="OnFilterChanged"
+                                      Margin="0,0,16,8"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <TextBlock Text="卷名（不勾选则不限）" FontWeight="Bold" Margin="0,0,0,8"/>
+                <ItemsControl x:Name="ExamNameCheckList" Margin="0,0,0,16">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding}" Tag="{Binding}"
+                                      Checked="OnFilterChanged" Unchecked="OnFilterChanged"
+                                      Margin="0,0,16,8"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
                 <CheckBox x:Name="OnlyUnattemptedCheck" Content="仅未做过的题"
                           Checked="OnFilterChanged" Unchecked="OnFilterChanged" Margin="0,0,0,16"/>
             </StackPanel>

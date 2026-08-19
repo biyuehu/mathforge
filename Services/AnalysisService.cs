@@ -60,7 +60,7 @@ public static class AnalysisService
         .Where(a => a.Result == AttemptResult.Incorrect)
         .SelectMany(a => a.Reasons)
         .GroupBy(r => r)
-        .Select(g => new ReasonStat { Reason = g.Key.ToString(), Count = g.Count() })
+        .Select(g => new ReasonStat { Reason = ReasonLabels.Describe(g.Key), Count = g.Count() })
         .OrderByDescending(s => s.Count)
         .ToList();
   }

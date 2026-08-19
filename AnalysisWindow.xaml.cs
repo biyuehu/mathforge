@@ -1,5 +1,4 @@
 using System.Windows;
-using GaokaoMathTrainer.Models;
 using GaokaoMathTrainer.Services;
 
 namespace GaokaoMathTrainer;

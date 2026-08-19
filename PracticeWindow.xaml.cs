@@ -130,6 +130,9 @@ public partial class PracticeWindow : Window
     ResultText.Text = $"参考答案：{q.Answer}";
     ResultText.Foreground = System.Windows.Media.Brushes.Black;
 
+    // 已经看到答案，不再允许"跳过"（跳过=不计入记录，跟已看到答案的语义矛盾）
+    SkipButton.IsEnabled = false;
+
     foreach (var child in OptionsPanel.Children)
     {
       if (child is Button b) b.IsEnabled = false;
@@ -148,7 +151,7 @@ public partial class PracticeWindow : Window
     OptionsPanel.Children.Add(selfJudgePanel);
   }
 
-  // 非选择题的用户自评结果，直接写入记录（不走 Judge 的字符串比对逻辑）
+  // 非选择题的用户自评结果，直接写入记录（不走 Judge 的字符串比对逻辑），标记完成后直接前进
   private void JudgeSelfReported(Question q, AttemptResult result)
   {
     var duration = (int)(DateTime.Now - _questionShownAt).TotalSeconds;
@@ -170,14 +173,7 @@ public partial class PracticeWindow : Window
     _judgedIndexes.Add(_currentIndex);
     _selectedOptionByIndex[_currentIndex] = null;
 
-    ScoreText.Text = $"✓ {_correctCount}   ✗ {_incorrectCount}";
-    NextButton.IsEnabled = true;
-    SkipButton.IsEnabled = false;
-
-    foreach (var child in OptionsPanel.Children)
-    {
-      if (child is Button b) b.IsEnabled = false;
-    }
+    AdvanceToNext();
   }
 
   private static string DescribeResult(AttemptResult result) => result switch
