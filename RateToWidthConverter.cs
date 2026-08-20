@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace GaokaoMathTrainer;
+namespace MathForge;
 
 // 把 0~100 的正确率映射成 0~300 像素宽度，用于简易条形图
 public class RateToWidthConverter : IValueConverter

@@ -19,8 +19,5 @@ clean:
 restore:
   dotnet restore
 
-preprocess input="gaokao-math.json" output="Data/gaokao-math.json":
-  node scripts/preprocess.js {{input}} {{output}}
-
 format:
   dotnet format

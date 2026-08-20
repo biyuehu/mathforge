@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>MathForge</AssemblyName>
+    <RootNamespace>MathForge</RootNamespace>
+
+    <Authors>Arimura Sena</Authors>
+    <Product>MathForge</Product>
+    <Description>一个基于本地题库的高考数学刷题桌面应用，用 WPF (.NET) 构建，内置 LaTeX 公式渲染。</Description>
+    <Version>0.1.0</Version>
+    <Copyright>Copyright © 2026 Arimura Sena</Copyright>
+
+    <RepositoryUrl>https://github.com/biyuehu/mathforge</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4129.50" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\gaokao-math.json" />
+    <EmbeddedResource Include="Assets\tex-svg.js" />
+  </ItemGroup>
+</Project>

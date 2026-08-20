@@ -1,9 +1,9 @@
 using System.Windows;
 using System.Windows.Controls;
-using GaokaoMathTrainer.Models;
-using GaokaoMathTrainer.Services;
+using MathForge.Models;
+using MathForge.Services;
 
-namespace GaokaoMathTrainer;
+namespace MathForge;
 
 public class MistakeListItem
 {
@@ -22,7 +22,7 @@ public partial class MistakeWindow : Window
     _bank = bank;
     _dataStore = dataStore;
     InitializeComponent();
-    ThresholdCombo.SelectedIndex = 0; // 在 InitializeComponent 完成后设置，触发 SelectionChanged 时所有控件已就绪
+    ThresholdCombo.SelectedIndex = 0;
   }
 
   private int SelectedThreshold => ThresholdCombo.SelectedIndex + 1;
@@ -62,12 +62,12 @@ public partial class MistakeWindow : Window
       MessageBox.Show("当前没有待解决的错题。", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
       return;
     }
-
+    var owner = Owner;
     var practiceWindow = new PracticeWindow(_mistakeQuestions, _dataStore, SessionType.MistakePractice)
     {
-      Owner = this
+      Owner = owner
     };
-    Close();
     practiceWindow.ShowDialog();
+    Close();
   }
 }

@@ -1,8 +1,8 @@
 using System.Windows;
 using System.Windows.Controls;
-using GaokaoMathTrainer.Models;
+using MathForge.Models;
 
-namespace GaokaoMathTrainer;
+namespace MathForge;
 
 public partial class ReasonSelectWindow : Window
 {

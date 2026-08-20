@@ -1,4 +1,4 @@
-namespace GaokaoMathTrainer.Models;
+namespace MathForge.Models;
 
 public class Question
 {

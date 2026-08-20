@@ -1,9 +1,9 @@
 using System.Windows;
 using System.Windows.Controls;
-using GaokaoMathTrainer.Models;
-using GaokaoMathTrainer.Services;
+using MathForge.Models;
+using MathForge.Services;
 
-namespace GaokaoMathTrainer;
+namespace MathForge;
 
 public partial class CategorySelectWindow : Window
 {

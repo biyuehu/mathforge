@@ -1,8 +1,8 @@
 using System.IO;
 using System.Text.Json;
-using GaokaoMathTrainer.Models;
+using MathForge.Models;
 
-namespace GaokaoMathTrainer.Services;
+namespace MathForge.Services;
 
 public class DataStore
 {
@@ -26,7 +26,7 @@ public class DataStore
   {
     _dataDir = Path.Combine(
       Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-      "GaokaoMathTrainer");
+      "MathForge");
     Directory.CreateDirectory(_dataDir);
 
     _attemptsPath = Path.Combine(_dataDir, "attempts.json");

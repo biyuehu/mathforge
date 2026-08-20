@@ -1,9 +1,9 @@
 using System.Windows;
 using System.Windows.Controls;
-using GaokaoMathTrainer.Models;
-using GaokaoMathTrainer.Services;
+using MathForge.Models;
+using MathForge.Services;
 
-namespace GaokaoMathTrainer;
+namespace MathForge;
 
 public partial class PracticeWindow : Window
 {
@@ -39,6 +39,7 @@ public partial class PracticeWindow : Window
     _currentIndex = startIndex;
     _tracksGlobalProgress = tracksGlobalProgress;
     _globalStartIndex = startIndex;
+    OptionsView.OptionClicked += OnOptionsViewClicked;
     ShowCurrentQuestion();
   }
 
@@ -57,34 +58,27 @@ public partial class PracticeWindow : Window
         ? "来源未知"
         : $"{q.Source.Year} {q.Source.ExamName}";
     MetaText.Text = $"{sourceLabel} · {q.Type} · 难度：{q.Difficulty}";
-    StemText.Text = q.Stem;
+    StemView.SetContent(q.Stem);
 
     PrevButton.IsEnabled = _currentIndex > 0;
 
     bool alreadyJudged = _judgedIndexes.Contains(_currentIndex);
     OptionsPanel.Children.Clear();
+    OptionsView.Visibility = Visibility.Collapsed;
 
     if (q.Type == "选择题" && !string.IsNullOrEmpty(q.Options))
     {
+      OptionsView.Visibility = Visibility.Visible;
       var lines = q.Options.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+      var options = new List<(string label, string text)>();
       foreach (var line in lines)
       {
         var trimmed = line.Trim();
         if (trimmed.Length == 0) continue;
         var label = trimmed[0].ToString();
-
-        var btn = new Button
-        {
-          Content = trimmed,
-          Tag = label,
-          HorizontalContentAlignment = HorizontalAlignment.Left,
-          Padding = new Thickness(12, 8, 12, 8),
-          Margin = new Thickness(0, 4, 0, 4),
-          IsEnabled = !alreadyJudged
-        };
-        btn.Click += OnOptionClick;
-        OptionsPanel.Children.Add(btn);
+        options.Add((label, trimmed));
       }
+      OptionsView.SetOptions(options);
     }
     else if (!alreadyJudged)
     {
@@ -126,9 +120,8 @@ public partial class PracticeWindow : Window
   private void RevealAnswerForSelfJudge(Question q)
   {
     ResultPanel.Visibility = Visibility.Visible;
-    ExplanationText.Text = q.Explanation;
-    ResultText.Text = $"参考答案：{q.Answer}";
-    ResultText.Foreground = System.Windows.Media.Brushes.Black;
+    ExplanationView.SetContent(q.Explanation);
+    ResultView.SetContent($"参考答案：{q.Answer}");
 
     // 已经看到答案，不再允许"跳过"（跳过=不计入记录，跟已看到答案的语义矛盾）
     SkipButton.IsEnabled = false;
@@ -184,12 +177,13 @@ public partial class PracticeWindow : Window
     _ => "未知"
   };
 
-  private void OnOptionClick(object sender, RoutedEventArgs e)
+  private void OnOptionsViewClicked(string selectedLabel)
   {
-    var btn = (Button)sender;
-    var selected = btn.Tag as string;
+    bool alreadyJudged = _judgedIndexes.Contains(_currentIndex);
+    if (alreadyJudged) return; // 回看模式下不响应点击
+
     var q = _questions[_currentIndex];
-    Judge(selected, q);
+    Judge(selectedLabel, q);
   }
 
   // 判定：计算结果、写入记录（归因先留空，前进时如果判错再补充）、更新本轮计数
@@ -224,32 +218,24 @@ public partial class PracticeWindow : Window
     DisplayResult(selected, q);
     NextButton.IsEnabled = true;
     SkipButton.IsEnabled = false;
-
-    foreach (var child in OptionsPanel.Children)
-    {
-      if (child is Button b) b.IsEnabled = false;
-    }
   }
 
   private void DisplayResult(string? selected, Question q)
   {
     ResultPanel.Visibility = Visibility.Visible;
-    ExplanationText.Text = q.Explanation;
+    ExplanationView.SetContent(q.Explanation);
 
     if (selected == null)
     {
-      ResultText.Text = $"正确答案：{q.Answer}";
-      ResultText.Foreground = System.Windows.Media.Brushes.Black;
+      ResultView.SetContent($"正确答案：{q.Answer}");
       return;
     }
 
     bool isCorrect = string.Equals(selected, q.Answer.Trim(), StringComparison.OrdinalIgnoreCase);
-    ResultText.Text = isCorrect
+    var text = isCorrect
         ? $"回答正确！答案：{q.Answer}"
         : $"回答错误。你的答案：{selected}，正确答案：{q.Answer}";
-    ResultText.Foreground = isCorrect
-        ? System.Windows.Media.Brushes.Green
-        : System.Windows.Media.Brushes.Red;
+    ResultView.SetContent(text, isCorrect ? "green" : "red");
   }
 
   private void OnPrevClick(object sender, RoutedEventArgs e)

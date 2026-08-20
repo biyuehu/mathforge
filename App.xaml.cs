@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Threading;
 
-namespace GaokaoMathTrainer;
+namespace MathForge;
 
 public partial class App : Application
 {

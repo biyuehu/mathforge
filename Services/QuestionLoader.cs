@@ -1,10 +1,11 @@
 using System.IO;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using GaokaoMathTrainer.Models;
+using MathForge.Models;
 
-namespace GaokaoMathTrainer.Services;
+namespace MathForge.Services;
 
 public class QuestionBank
 {
@@ -20,21 +21,40 @@ public class MetaInfo
 
 public static class QuestionLoader
 {
+  // 从嵌入资源加载题库，不再依赖磁盘文件路径
+  public static QuestionBank LoadFromEmbeddedResource()
+  {
+    var assembly = Assembly.GetExecutingAssembly();
+    var resourceName = "MathForge.Assets.gaokao-math.json";
+    using var stream = assembly.GetManifestResourceStream(resourceName);
+    if (stream == null)
+    {
+      throw new InvalidOperationException(
+          $"未找到嵌入资源: {resourceName}。可用资源: {string.Join(", ", assembly.GetManifestResourceNames())}");
+    }
+    using var reader = new StreamReader(stream);
+    var json = reader.ReadToEnd();
+    return LoadFromJson(json);
+  }
+
   public static QuestionBank Load(string jsonPath)
   {
     var json = File.ReadAllText(jsonPath);
+    return LoadFromJson(json);
+  }
+
+  private static QuestionBank LoadFromJson(string json)
+  {
     var options = new JsonSerializerOptions
     {
       PropertyNameCaseInsensitive = true
     };
     var bank = JsonSerializer.Deserialize<QuestionBank>(json, options)
         ?? throw new InvalidDataException("题库解析失败");
-
     foreach (var q in bank.Questions)
     {
       q.QuestionId = GenerateStableId(q);
     }
-
     return bank;
   }
 

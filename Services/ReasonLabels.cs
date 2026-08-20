@@ -1,6 +1,6 @@
-using GaokaoMathTrainer.Models;
+using MathForge.Models;
 
-namespace GaokaoMathTrainer.Services;
+namespace MathForge.Services;
 
 public static class ReasonLabels
 {

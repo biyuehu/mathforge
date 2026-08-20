@@ -1,9 +1,8 @@
-using System.IO;
 using System.Windows;
-using GaokaoMathTrainer.Models;
-using GaokaoMathTrainer.Services;
+using MathForge.Models;
+using MathForge.Services;
 
-namespace GaokaoMathTrainer;
+namespace MathForge;
 
 public partial class MainWindow : Window
 {
@@ -21,13 +20,7 @@ public partial class MainWindow : Window
   {
     try
     {
-      var path = Path.Combine(AppContext.BaseDirectory, "Data", "gaokao-math.json");
-      if (!File.Exists(path))
-      {
-        StatusText.Text = $"未找到题库文件: {path}";
-        return;
-      }
-      _bank = QuestionLoader.Load(path);
+      _bank = QuestionLoader.LoadFromEmbeddedResource();
       _dataStore = new DataStore();
       StatusText.Text = $"已加载 {_bank.Questions.Count} 道题目 · 已完成 {_dataStore.Attempts.Count} 次作答";
     }
