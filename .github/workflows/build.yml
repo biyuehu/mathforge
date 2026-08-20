@@ -3,10 +3,20 @@ name: Build
 
 on:
   push:
-    branches: [main, master]
+    branches: ["main"]
+    paths:
+      - '**.cs'
+      - '**.json'
+      - '**.csproj'
+      - '.github/**/*'
 
   pull_request:
-    branches: [main, master]
+    branches: ["main"]
+    paths:
+      - '**.cs'
+      - '**.json'
+      - '**.csproj'
+      - '.github/**/*'
 
 jobs:
   build:

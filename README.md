@@ -17,6 +17,12 @@
 
 ## 开发
 
+初始化：
+
+```bash
+lefthook install
+```
+
 使用 [just](https://github.com/casey/just)：
 
 ```bash
