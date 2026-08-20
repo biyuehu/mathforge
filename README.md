@@ -1,5 +1,7 @@
 # MathForge
 
+[![Build](https://github.com/biyuehu/mathforge/actions/workflows/build.yml/badge.svg)](https://github.com/biyuehu/mathforge/actions/workflows/build.yml) [![License: GPL-3.0-only](https://img.shields.io/badge/License-GPL--3.0--only-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) ![C#](https://img.shields.io/badge/C%23-.NET-512BD4?labelColor=green) ![WPF](https://img.shields.io/badge/WPF-Windows-0078D6?logo=windows&logoColor=white) ![MathJax](https://img.shields.io/badge/MathJax-LaTeX-1E6FBA?logo=latex&logoColor=white)
+
 一个基于本地题库的高考数学刷题桌面应用，用 WPF (.NET) 构建，内置 LaTeX 公式渲染。
 
 ## 功能
