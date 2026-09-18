@@ -6,6 +6,9 @@ default:
 build:
   dotnet build
 
+publish:
+  dotnet publish
+
 run:
   dotnet run
 
